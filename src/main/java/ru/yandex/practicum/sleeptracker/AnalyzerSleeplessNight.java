@@ -48,7 +48,7 @@ public class AnalyzerSleeplessNight implements Function<List<SleepingSession>, S
                 .collect(Collectors.toList());
 
         long nightWithSleep = allDays.stream()
-                .filter(day ->{
+                .filter(day -> {
                     LocalDateTime nightStart = day.atTime(0, 0);
                     LocalDateTime nightEnd = day.atTime(6, 0);
                     return sessions.stream()
