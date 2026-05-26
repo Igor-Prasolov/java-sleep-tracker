@@ -17,12 +17,20 @@ public class AnalyzerChronotype implements Function<List<SleepingSession>, Sleep
             return new SleepAnalysisResult("Хронотип пользователя", "голубь");
         }
 
-        LocalDateTime firstStart = sessions.stream()
+        List<SleepingSession> validSession = sessions.stream()
+                .filter(session -> session.getStart() != null
+                        && session.getEnd() != null)
+                .collect(Collectors.toList());
+        if (validSession.isEmpty()) {
+            return new SleepAnalysisResult("Хронотип пользователя", "голубь");
+        }
+
+        LocalDateTime firstStart = validSession.stream()
                 .map(SleepingSession::getStart)
                 .min(LocalDateTime::compareTo)
                 .get();
 
-        LocalDateTime lastEnd = sessions.stream()
+        LocalDateTime lastEnd = validSession.stream()
                 .map(SleepingSession::getEnd)
                 .max(LocalDateTime::compareTo)
                 .get();
@@ -52,7 +60,7 @@ public class AnalyzerChronotype implements Function<List<SleepingSession>, Sleep
                     LocalDateTime nightStart = day.atTime(0, 0);
                     LocalDateTime nightEnd = day.atTime(6, 0);
 
-                    return sessions.stream()
+                    return validSession.stream()
                             .filter(session ->
                                     session.getStart().isBefore(nightEnd) &&
                                             session.getEnd().isAfter(nightStart)

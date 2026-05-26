@@ -17,12 +17,20 @@ public class AnalyzerSleeplessNight implements Function<List<SleepingSession>, S
             return new SleepAnalysisResult("Бессонные ночи", 0);
         }
 
-        LocalDateTime start = sessions.stream()
+        List<SleepingSession> validSession = sessions.stream()
+                .filter(session -> session.getStart() != null
+                        && session.getEnd() != null)
+                .collect(Collectors.toList());
+        if (validSession.isEmpty()) {
+            return new SleepAnalysisResult("Бессонные ночи", 0);
+        }
+
+        LocalDateTime start = validSession.stream()
                 .map(SleepingSession::getStart)
                 .min(LocalDateTime::compareTo)
                 .get();
 
-        LocalDateTime end = sessions.stream()
+        LocalDateTime end = validSession.stream()
                 .map(SleepingSession::getEnd)
                 .max(LocalDateTime::compareTo)
                 .get();
@@ -51,7 +59,7 @@ public class AnalyzerSleeplessNight implements Function<List<SleepingSession>, S
                 .filter(day -> {
                     LocalDateTime nightStart = day.atTime(0, 0);
                     LocalDateTime nightEnd = day.atTime(6, 0);
-                    return sessions.stream()
+                    return validSession.stream()
                             .anyMatch(session -> session.getStart().isBefore(nightEnd)
                                     && session.getEnd().isAfter(nightStart)
                             );

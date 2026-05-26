@@ -9,10 +9,12 @@ public class AnalyzerMinSession implements Function<List<SleepingSession>, Sleep
     @Override
     public SleepAnalysisResult apply(List<SleepingSession> sessions) {
         long min = Math.toIntExact(sessions.stream()
+                .filter(session -> session.getStart() != null
+                        && session.getEnd() != null)
                 .mapToLong(session
                         -> Duration.between(session.getStart(), session.getEnd()).toMinutes())
                 .min()
-                .getAsLong());
+                .orElse(0));
         return new SleepAnalysisResult("Минимальная продолжительность сна", min);
     }
 }

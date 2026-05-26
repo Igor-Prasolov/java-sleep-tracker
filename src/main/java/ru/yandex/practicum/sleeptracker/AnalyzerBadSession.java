@@ -10,6 +10,7 @@ public class AnalyzerBadSession implements Function<List<SleepingSession>, Sleep
     public SleepAnalysisResult apply(List<SleepingSession> sessions) {
         int badCount = Math.toIntExact(
                 sessions.stream()
+                        .filter(session -> session.getQuality() != null)
                         .filter(session -> session.getQuality() == Quality.BAD)
                         .count()
         );

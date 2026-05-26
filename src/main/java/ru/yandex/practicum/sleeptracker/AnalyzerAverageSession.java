@@ -9,10 +9,12 @@ public class AnalyzerAverageSession implements Function<List<SleepingSession>, S
     @Override
     public SleepAnalysisResult apply(List<SleepingSession> sessions) {
         double average = sessions.stream()
+                .filter(session -> session.getStart() != null
+                        && session.getEnd() != null)
                 .mapToLong(session
                         -> Duration.between(session.getStart(), session.getEnd()).toMinutes())
                 .average()
-                .getAsDouble();
+                .orElse(0);
         return new SleepAnalysisResult("Средняя продолжительность сессии", average);
     }
 }
