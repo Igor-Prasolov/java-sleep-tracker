@@ -6,7 +6,7 @@ import java.util.function.Function;
 public class AnalyzerCountSession implements Function<List<SleepingSession>, SleepAnalysisResult> {
 
     @Override
-    public SleepAnalysisResult apply(List<SleepingSession> sessions){
+    public SleepAnalysisResult apply(List<SleepingSession> sessions) {
         int size = sessions.size();
         return new SleepAnalysisResult("Всего сессий", size);
     }

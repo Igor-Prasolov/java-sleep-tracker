@@ -6,7 +6,6 @@ import java.util.function.Function;
 public class AnalyzerBadSession implements Function<List<SleepingSession>, SleepAnalysisResult> {
 
 
-
     @Override
     public SleepAnalysisResult apply(List<SleepingSession> sessions) {
         int badCount = Math.toIntExact(
