@@ -28,7 +28,7 @@ public class SleepTrackerApp {
 
         SleepTrackerApp app = new SleepTrackerApp();
         try {
-            List<String> lines = app.allLinesRead();
+            List<String> lines = app.allLinesRead(args[0]);
             List<SleepingSession> sessions = app.parse(lines);
 
             for (Function<List<SleepingSession>, SleepAnalysisResult> analyzer : ANALYZERS) {
@@ -40,11 +40,11 @@ public class SleepTrackerApp {
         }
     }
 
-    private List<String> allLinesRead() throws IOException {
+    private List<String> allLinesRead(String fileName) throws IOException {
         return new BufferedReader(
                 new InputStreamReader(
                         Objects.requireNonNull(
-                                getClass().getResourceAsStream("/sleep_log.txt")
+                                getClass().getResourceAsStream("/" + fileName)
                         )
                 )
         ).lines().toList();
